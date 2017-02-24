@@ -35,42 +35,51 @@ public class Avdl2AvscMojo extends org.apache.maven.plugin.AbstractMojo {
 	 */
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		
-		if (!inputAvdlDirectory.exists()) {
-			throw new MojoExecutionException("Cannot find inputAvdlDirectory: " 
-					+ inputAvdlDirectory.toString());
-		}
-		
-		if (!inputAvdlDirectory.isDirectory()) {
-			throw new MojoExecutionException("inputAvdlDirectory: " 
-					+ inputAvdlDirectory.toString() + " is not a directory");
-		}
-		
-		if (!outputSchemaDirectory.exists()) {
-			outputSchemaDirectory.mkdirs();
-		}
-		else if (!outputSchemaDirectory.isDirectory()){
-			throw new MojoExecutionException("outputSchemaDirectory: " 
-					+ outputSchemaDirectory.toString() + " is not a directory");
-		}
 		
 		getLog().info("Finding .avdl files in directory: " + inputAvdlDirectory.toString());
-		File[] avdlFiles = inputAvdlDirectory.listFiles(new FilenameFilter() {
+		generateSchemas(inputAvdlDirectory, outputSchemaDirectory);
+		
+	}
+
+    private void generateSchemas(File inputDir, File outputDir) throws MojoExecutionException {
+        if (!inputDir.exists()) {
+            throw new MojoExecutionException("Cannot find inputAvdlDirectory: " 
+                    + inputDir.toString());
+        }
+        
+        if (!inputDir.isDirectory()) {
+            throw new MojoExecutionException("inputAvdlDirectory: " 
+                    + inputDir.toString() + " is not a directory");
+        }
+        
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+        else if (!outputDir.isDirectory()){
+            throw new MojoExecutionException("outputSchemaDirectory: " 
+                    + outputDir.toString() + " is not a directory");
+        }
+        File[] avdlFiles = inputDir.listFiles(new FilenameFilter() {
 			/*
 			 * (non-Javadoc)
 			 * @see java.io.FilenameFilter#accept(java.io.File, java.lang.String)
 			 */
 			public boolean accept(File dir, String name) {
-				return name.endsWith(".avdl");
+				return name.endsWith(".avdl") || (!name.startsWith(".") && (new File(dir,name)).isDirectory());
 			}
 		});
 		
 		if (avdlFiles != null) {
 			for (File avdlFile : avdlFiles) {
-				generateSchema(avdlFile);
+			    if (avdlFile.getName().endsWith(".avdl")) {
+			        generateSchema(avdlFile, outputDir);
+			    }
+			    if (avdlFile.isDirectory() && !avdlFile.getName().startsWith(".")) {
+			        generateSchemas(avdlFile, new File(outputDir, avdlFile.getName()));
+			    }
 			}
 		}
-		
-	}
+    }
 	
 	/**
 	 * Generates the Avro schema avsc file from the specified avdl file.
@@ -78,14 +87,14 @@ public class Avdl2AvscMojo extends org.apache.maven.plugin.AbstractMojo {
 	 * @param avdlFile
 	 * @throws MojoExecutionException 
 	 */
-	private void generateSchema(File avdlFile) throws MojoExecutionException {
+	private void generateSchema(File avdlFile, File outputSchemaDir) throws MojoExecutionException {
 		Idl idlParser = null;
 		getLog().info("Found avdl file: " + avdlFile.getPath());
 		try {
 			idlParser = new Idl(avdlFile);
 			
 			for (Schema schema : idlParser.CompilationUnit().getTypes()) {
-				String dirpath = outputSchemaDirectory.getAbsolutePath();
+				String dirpath = outputSchemaDir.getAbsolutePath();
 			    String filename = dirpath + "/" + schema.getName() + ".avsc";
 			    getLog().info("Creating schema file: " + filename);
 			    FileOutputStream fileOutputStream = new FileOutputStream(filename);

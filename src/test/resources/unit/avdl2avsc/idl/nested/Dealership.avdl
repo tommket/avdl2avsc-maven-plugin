@@ -1,0 +1,13 @@
+@namespace("com.sb.plugins.test.nested")
+
+protocol DealershipProtocol {
+    import idl "../car.avdl";
+    
+
+    record Dealership{   
+        array<com.sb.plugins.test.Car> availableCars;
+        
+        string name;
+        string address;
+    }
+}

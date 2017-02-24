@@ -2,17 +2,17 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.sb.plugins</groupId>
+  <groupId>com.zefr.plugins</groupId>
   <artifactId>avdl2avsc-maven-plugin</artifactId>
-  <version>1.0</version>
+  <version>1.0.1</version>
   <packaging>maven-plugin</packaging>
 
   <name>Avro IDL to Avro Schema Maven Plugin</name>
 
-  <url>https://github.com/sameerbhadouria/avdl2avsc-maven-plugin</url>
+  <url>https://github.com/ZEFR-INC/avdl2avsc-maven-plugin</url>
   
   <scm>
-    <url>https://github.com/sameerbhadouria/avdl2avsc-maven-plugin</url>
+    <url>https://github.com/ZEFR-INC/avdl2avsc-maven-plugin</url>
   </scm>
 
   <properties>
@@ -21,14 +21,19 @@
     <github.global.server>github</github.global.server>
   </properties>
   
-  <distributionManagement>
-    <repository>
-        <id>internal-repo</id>
-        <name>Temporary Staging directory</name>
-        <url>${internal.repo.path}</url>
-    </repository>
-  </distributionManagement>
-
+    <distributionManagement>
+        <repository>
+            <id>zefr</id>
+            <name>Zefr</name>
+            <url>http://nexus.zefr.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>zefr-snapshots</id>
+            <name>Zefr Snapshots</name>
+            <url>http://nexus.zefr.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+    
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -111,37 +116,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.8.1</version>
-        <configuration>
-          <altDeploymentRepository>internal-repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
-        </configuration>
-      </plugin>
-      <plugin>
-          <groupId>com.github.github</groupId>
-          <artifactId>site-maven-plugin</artifactId>
-          <version>0.9</version>
-          <configuration>
-              <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
-              <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
-              <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
-              <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
-              <includes><include>**/*</include></includes>
-              <merge>true</merge>
-              <repositoryName>avdl2avsc-maven-plugin</repositoryName>      <!-- github repo name -->
-              <repositoryOwner>sameerbhadouria</repositoryOwner>    <!-- github username  -->
-          </configuration>
-          <executions>
-            <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
-            <execution>
-              <goals>
-                <goal>site</goal>
-              </goals>
-              <phase>deploy</phase>
-            </execution>
-          </executions>
       </plugin>
     </plugins>
   </build>
