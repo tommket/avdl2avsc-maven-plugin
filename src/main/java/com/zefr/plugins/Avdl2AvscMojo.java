@@ -1,4 +1,4 @@
-package com.sb.plugins;
+package com.zefr.plugins;
 
 import java.io.File;
 import java.io.FileOutputStream;

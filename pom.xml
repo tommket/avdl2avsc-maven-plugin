@@ -4,7 +4,7 @@
 
   <groupId>com.zefr.plugins</groupId>
   <artifactId>avdl2avsc-maven-plugin</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Avro IDL to Avro Schema Maven Plugin</name>

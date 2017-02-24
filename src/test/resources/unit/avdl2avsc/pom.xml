@@ -3,9 +3,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.sb.plugins</groupId>
+  <groupId>com.zefr.plugins</groupId>
   <artifactId>avdl2avsc-maven-plugin-test</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Test Avdl2Avsc</name>
 
@@ -21,7 +21,7 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>com.sb.plugins</groupId>
+        <groupId>com.zefr.plugins</groupId>
         <artifactId>avdl2avsc-maven-plugin</artifactId>
         <configuration>
           <!-- Specify the Mojo parameters -->

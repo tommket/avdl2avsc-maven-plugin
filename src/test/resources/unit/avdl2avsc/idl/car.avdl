@@ -1,4 +1,4 @@
-@namespace("com.sb.plugins.test")
+@namespace("com.zefr.plugins.test")
 
 protocol CarProtocol {
 
