@@ -17,6 +17,10 @@ Note:
 =====
 Defining RPC messages in the avdl will be of no use in this case as schema files do not contain this information.
 
+Release versioning:
+===================
+The versioning will use the version number of the underlying avro-compiler dependency, that uses the version of its AVRO
+specification.
 
 Usage:
 ======
