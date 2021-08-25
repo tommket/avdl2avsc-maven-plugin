@@ -6,6 +6,7 @@ import lombok.extern.java.Log;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.junit.Assert;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,9 +71,11 @@ public class Avdl2AvscMojoTest extends AbstractMojoTestCase {
 
 	@SneakyThrows
 	private void assertAvscContents(@NonNull final Path avscPath) {
-		Assert.assertEquals("Comparing expected and generated AVSC files: " + avscPath,
+		JSONAssert.assertEquals("Comparing expected and generated AVSC files: " + avscPath,
 				loadExpectedAvscResource(avscPath),
-				loadGeneratedAvsc(avscPath));
+				loadGeneratedAvsc(avscPath),
+				true
+		);
 	}
 
 	private String loadGeneratedAvsc(@NonNull final Path generatedAvscPath) throws IOException {
