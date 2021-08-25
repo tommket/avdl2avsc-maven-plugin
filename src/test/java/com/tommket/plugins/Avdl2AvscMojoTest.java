@@ -2,6 +2,7 @@ package com.tommket.plugins;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,6 +22,7 @@ import java.util.List;
  *
  * @author sameerbhadouria
  */
+@Log
 public class Avdl2AvscMojoTest extends AbstractMojoTestCase {
 	private static final List<Path> AVSC_PATHS = Arrays.asList(
 			Paths.get("Type.avsc"),
@@ -75,6 +77,7 @@ public class Avdl2AvscMojoTest extends AbstractMojoTestCase {
 
 	private String loadGeneratedAvsc(@NonNull final Path generatedAvscPath) throws IOException {
 		final Path generatedFilePath = Paths.get("target", "generated-sources", "avsc", generatedAvscPath.toString());
+		log.info("Loading generated AVSC file: " + generatedFilePath);
 		return new String(Files.readAllBytes(generatedFilePath), StandardCharsets.UTF_8);
 	}
 
@@ -84,6 +87,7 @@ public class Avdl2AvscMojoTest extends AbstractMojoTestCase {
 	}
 
 	private String loadTestResource(@NonNull final Path resourcePath) throws URISyntaxException, IOException {
+		log.info("Loading test resource: " + resourcePath);
 		final Path resPath = Paths.get(this.getClass().getResource(resourcePath.toString()).toURI());
 		return new String(Files.readAllBytes(resPath), StandardCharsets.UTF_8);
 	}
