@@ -1,11 +1,11 @@
-@namespace("com.zefr.plugins.test.nested")
+@namespace("com.tommket.plugins.test.nested")
 
 protocol DealershipProtocol {
     import idl "../car.avdl";
     
 
     record Dealership{   
-        array<com.zefr.plugins.test.Car> availableCars;
+        array<com.tommket.plugins.test.Car> availableCars;
         
         string name;
         string address;

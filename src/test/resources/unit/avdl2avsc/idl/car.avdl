@@ -1,4 +1,4 @@
-@namespace("com.zefr.plugins.test")
+@namespace("com.tommket.plugins.test")
 
 protocol CarProtocol {
 
