@@ -1,19 +1,34 @@
 package com.tommket.plugins;
 
-import java.io.File;
-
-import org.apache.avro.Schema;
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Test class for the AVDL to AVSC conversion
- * 
- * @author sameerbhadouria
  *
+ * @author sameerbhadouria
  */
 public class Avdl2AvscMojoTest extends AbstractMojoTestCase {
+	private static final List<Path> AVSC_PATHS = Arrays.asList(
+			Paths.get("Type.avsc"),
+			Paths.get("Car.avsc"),
+			Paths.get("nested", "Type.avsc"),
+			Paths.get("nested", "Car.avsc"),
+			Paths.get("nested", "Dealership.avsc")
+	);
 
 	/*
 	 * (non-Javadoc)
@@ -36,25 +51,41 @@ public class Avdl2AvscMojoTest extends AbstractMojoTestCase {
 	@Test
 	public void testBasicSchemaGeneration() throws Exception {
 		File pomFile = getTestFile("src/test/resources/unit/avdl2avsc/pom.xml");
-		
+
 		Assert.assertNotNull(pomFile);
 		Assert.assertTrue(pomFile.exists());
-		
+
 		Avdl2AvscMojo mojo = (Avdl2AvscMojo) lookupMojo("genschema", pomFile);
-		
+
 		Assert.assertNotNull(mojo);
-		
+
 		mojo.execute();
-		//Verify all the types were created and parse successfully 
+		//Verify all the types were created and parse successfully
 
 		//base directory should exist
-        Assert.assertEquals("com.tommket.plugins.test.Type",new Schema.Parser().parse(new File("target/generated-sources/avsc/Type.avsc")).getFullName());
-        Assert.assertEquals("com.tommket.plugins.test.Car",new Schema.Parser().parse(new File("target/generated-sources/avsc/Car.avsc")).getFullName());
-		// nested should exist
-        Schema.Parser parser = new Schema.Parser();
-        Assert.assertEquals("com.tommket.plugins.test.Type",new Schema.Parser().parse(new File("target/generated-sources/avsc/nested/Type.avsc")).getFullName());
-        Assert.assertEquals("com.tommket.plugins.test.Car",new Schema.Parser().parse(new File("target/generated-sources/avsc/nested/Car.avsc")).getFullName());
-        Assert.assertEquals("com.tommket.plugins.test.nested.Dealership",new Schema.Parser().parse(new File("target/generated-sources/avsc/nested/Dealership.avsc")).getFullName());
+		AVSC_PATHS.forEach(this::assertAvscContents);
 	}
-	
+
+	@SneakyThrows
+	private void assertAvscContents(@NonNull final Path avscPath) {
+		Assert.assertEquals("Comparing expected and generated AVSC files: " + avscPath,
+				loadExpectedAvscResource(avscPath),
+				loadGeneratedAvsc(avscPath));
+	}
+
+	private String loadGeneratedAvsc(@NonNull final Path generatedAvscPath) throws IOException {
+		final Path generatedFilePath = Paths.get("target", "generated-sources", "avsc", generatedAvscPath.toString());
+		return new String(Files.readAllBytes(generatedFilePath), StandardCharsets.UTF_8);
+	}
+
+	private String loadExpectedAvscResource(@NonNull final Path expectedResourcePath) throws URISyntaxException,
+			IOException {
+		return loadTestResource(Paths.get("/unit", "avdl2avsc", "expected", expectedResourcePath.toString()));
+	}
+
+	private String loadTestResource(@NonNull final Path resourcePath) throws URISyntaxException, IOException {
+		final Path resPath = Paths.get(this.getClass().getResource(resourcePath.toString()).toURI());
+		return new String(Files.readAllBytes(resPath), StandardCharsets.UTF_8);
+	}
+
 }

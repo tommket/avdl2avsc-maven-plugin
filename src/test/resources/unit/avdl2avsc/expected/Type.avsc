@@ -1,0 +1,6 @@
+{
+  "type" : "enum",
+  "name" : "Type",
+  "namespace" : "com.tommket.plugins.test",
+  "symbols" : [ "SPORTS", "LUXURY", "LARGE", "MIDSIZE", "COMPACT" ]
+}
