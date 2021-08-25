@@ -23,12 +23,7 @@ Usage:
 
 Add the following to your maven repositories plugin:
 
-```
-<repository>
-  <id>Sameer Maven Repo</id>
-  <url>https://github.com/sameerbhadouria/mvn-repo/raw/master</url>
-</repository>
-```
+TODO: Get to Maven Central, via a release pipeline job.
 
 Add the following to the maven build plugins:
 
@@ -36,7 +31,7 @@ Add the following to the maven build plugins:
 <build>
   <plugins>
     <plugin>
-       <groupId>com.sb.plugins</groupId>
+       <groupId>com.tommket.plugins</groupId>
        <artifactId>avdl2avsc-maven-plugin</artifactId>
        <version>1.10.2</version>
        <executions>
