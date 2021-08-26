@@ -63,27 +63,33 @@
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
-			<groupId>org.apache.maven.plugin-testing</groupId>
-			<artifactId>maven-plugin-testing-harness</artifactId>
-			<version>3.3.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-compat</artifactId>
-			<version>3.8.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.18.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.skyscreamer</groupId>
 			<artifactId>jsonassert</artifactId>
 			<version>1.5.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.soebes.itf.jupiter.extension</groupId>
+			<artifactId>itf-assertj</artifactId>
+			<version>0.11.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.7.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.soebes.itf.jupiter.extension</groupId>
+			<artifactId>itf-jupiter-extension</artifactId>
+			<version>0.11.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -122,6 +128,60 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>com.soebes.itf.jupiter.extension</groupId>
+				<artifactId>itf-maven-plugin</artifactId>
+				<version>0.11.0</version>
+				<executions>
+					<execution>
+						<id>installing</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>install</goal>
+							<goal>resources-its</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<!--
+					 ! currently needed to run integration tests.
+					-->
+					<systemPropertyVariables>
+						<maven.version>${maven.version}</maven.version>
+						<maven.home>${maven.home}</maven.home>
+					</systemPropertyVariables>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!--<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>enforce</id>
+						<configuration>
+							<rules>
+								<dependencyConvergence/>
+							</rules>
+						</configuration>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>-->
 			<plugin>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>2.8.2</version>

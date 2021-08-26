@@ -1,14 +1,13 @@
 package com.tommket.plugins;
 
+import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
+import com.soebes.itf.jupiter.extension.MavenTest;
+import com.soebes.itf.jupiter.maven.MavenExecutionResult;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.junit.Assert;
-import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -18,13 +17,16 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
+
 /**
  * Test class for the AVDL to AVSC conversion
  *
  * @author sameerbhadouria
  */
 @Log
-public class Avdl2AvscMojoTest extends AbstractMojoTestCase {
+@MavenJupiterExtension
+public class Avdl2AvscIT {
 	private static final List<Path> AVSC_PATHS = Arrays.asList(
 			Paths.get("Type.avsc"),
 			Paths.get("Car.avsc"),
@@ -33,39 +35,11 @@ public class Avdl2AvscMojoTest extends AbstractMojoTestCase {
 			Paths.get("nested", "Dealership.avsc")
 	);
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.apache.maven.plugin.testing.AbstractMojoTestCase#setUp()
-	 */
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
+	@MavenTest
+	public void testBasicSchemaGeneration(MavenExecutionResult result) throws Exception {
+		assertThat(result).isSuccessful();
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.codehaus.plexus.PlexusTestCase#tearDown()
-	 */
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
-
-	@Test
-	public void testBasicSchemaGeneration() throws Exception {
-		File pomFile = getTestFile("src/test/resources/unit/avdl2avsc/pom.xml");
-
-		Assert.assertNotNull(pomFile);
-		Assert.assertTrue(pomFile.exists());
-
-		Avdl2AvscMojo mojo = (Avdl2AvscMojo) lookupMojo("genschema", pomFile);
-
-		Assert.assertNotNull(mojo);
-
-		mojo.execute();
-		//Verify all the types were created and parse successfully
-
-		//base directory should exist
+		//assert files
 		AVSC_PATHS.forEach(this::assertAvscContents);
 	}
 
