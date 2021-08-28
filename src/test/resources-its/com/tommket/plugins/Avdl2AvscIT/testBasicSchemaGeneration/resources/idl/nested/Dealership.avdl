@@ -1,0 +1,10 @@
+@namespace("com.tommket.plugins.test.nested")
+protocol DealershipProtocol {
+	import idl "../Car.avdl";
+
+	record Dealership {
+		array<com.tommket.plugins.test.Car> availableCars;
+		string name;
+		string address;
+	}
+}
