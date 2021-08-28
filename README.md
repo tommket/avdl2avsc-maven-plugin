@@ -31,26 +31,27 @@ TODO: Get to Maven Central, via a release pipeline job.
 
 Add the following to the maven build plugins:
 
-```
+```xml
+
 <build>
-  <plugins>
-    <plugin>
-       <groupId>com.tommket.plugins</groupId>
-       <artifactId>avdl2avsc-maven-plugin</artifactId>
-       <version>1.10.2</version>
-       <executions>
-          <execution>
-              <phase>generate-sources</phase>
-              <goals>
-                  <goal>genschema</goal>
-              </goals>
-              <configuration>
-                  <inputAvdlDirectory>${basedir}/src/main/resources/avro/idl</inputAvdlDirectory>
-                  <outputSchemaDirectory>${basedir}/target/generated-sources/avro/schema</outputSchemaDirectory>
-              </configuration>
-          </execution>
-       </executions>
-     </plugin>
-  </plugins>
+	<plugins>
+		<plugin>
+			<groupId>com.tommket.plugins</groupId>
+			<artifactId>avdl2avsc-maven-plugin</artifactId>
+			<version>1.10.2</version>
+			<executions>
+				<execution>
+					<phase>generate-sources</phase>
+					<goals>
+						<goal>genschema</goal>
+					</goals>
+					<configuration>
+						<inputAvdlDirectory>${basedir}/src/main/resources/avro/idl</inputAvdlDirectory>
+						<outputSchemaDirectory>${basedir}/target/generated-sources/avro/schema</outputSchemaDirectory>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
 </build>
 ```
