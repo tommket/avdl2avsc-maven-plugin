@@ -15,10 +15,13 @@
 				<groupId>com.tommket.plugins</groupId>
 				<artifactId>avdl2avsc-maven-plugin</artifactId>
 				<version>@project.version@</version>
+				<goals>
+					<goal>genschema</goal>
+				</goals>
 				<configuration>
 					<!-- Specify the Mojo parameters -->
-					<inputAvdlDirectory>${basedir}/src/test/resources/unit/avdl2avsc/idl</inputAvdlDirectory>
-					<outputSchemaDirectory>${basedir}/target/generated-sources/avsc/</outputSchemaDirectory>
+					<inputAvdlDirectory>${basedir}/resources/idl</inputAvdlDirectory>
+					<outputSchemaDirectory>${basedir}/target/avsc/</outputSchemaDirectory>
 				</configuration>
 			</plugin>
 		</plugins>

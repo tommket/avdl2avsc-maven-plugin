@@ -1,5 +1,6 @@
 package com.tommket.plugins;
 
+import com.soebes.itf.jupiter.extension.MavenGoal;
 import com.soebes.itf.jupiter.extension.MavenJupiterExtension;
 import com.soebes.itf.jupiter.extension.MavenTest;
 import com.soebes.itf.jupiter.maven.MavenExecutionResult;
@@ -26,6 +27,7 @@ import static com.soebes.itf.extension.assertj.MavenITAssertions.assertThat;
  */
 @Log
 @MavenJupiterExtension
+@MavenGoal("avdl2avsc:genschema")
 public class Avdl2AvscIT {
 	private static final List<Path> AVSC_PATHS = Arrays.asList(
 			Paths.get("Type.avsc"),
@@ -36,24 +38,30 @@ public class Avdl2AvscIT {
 	);
 
 	@MavenTest
-	public void testBasicSchemaGeneration(MavenExecutionResult result) throws Exception {
+	public void testBasicSchemaGeneration(final MavenExecutionResult result) throws Exception {
 		assertThat(result).isSuccessful();
 
 		//assert files
-		AVSC_PATHS.forEach(this::assertAvscContents);
+		AVSC_PATHS.forEach(avscPath -> assertAvscContents(result, avscPath));
 	}
 
 	@SneakyThrows
-	private void assertAvscContents(@NonNull final Path avscPath) {
+	private void assertAvscContents(@NonNull final MavenExecutionResult result, @NonNull final Path avscPath) {
 		JSONAssert.assertEquals("Comparing expected and generated AVSC files: " + avscPath,
 				loadExpectedAvscResource(avscPath),
-				loadGeneratedAvsc(avscPath),
+				loadGeneratedAvsc(result, avscPath),
 				true
 		);
 	}
 
-	private String loadGeneratedAvsc(@NonNull final Path generatedAvscPath) throws IOException {
-		final Path generatedFilePath = Paths.get("target", "generated-sources", "avsc", generatedAvscPath.toString());
+	private String loadGeneratedAvsc(@NonNull final MavenExecutionResult result,
+	                                 @NonNull final Path generatedAvscPath) throws IOException {
+		final Path generatedFilePath = Paths.get(
+				result.getMavenProjectResult().getTargetProjectDirectory().toString()
+				, "target"
+				, "avsc"
+				, generatedAvscPath.toString()
+		);
 		log.info("Loading generated AVSC file: " + generatedFilePath);
 		return new String(Files.readAllBytes(generatedFilePath), StandardCharsets.UTF_8);
 	}
