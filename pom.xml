@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
-			<version>3.8.2</version>
+			<version>3.8.3</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>plexus-classworlds</artifactId>
@@ -57,33 +57,6 @@
 				<exclusion>
 					<artifactId>plexus-utils</artifactId>
 					<groupId>org.codehaus.plexus</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-core</artifactId>
-			<version>3.8.2</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-io</artifactId>
-					<groupId>commons-io</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>plexus-utils</artifactId>
-					<groupId>org.codehaus.plexus</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>plexus-container-default</artifactId>
-					<groupId>org.codehaus.plexus</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>guice</artifactId>
-					<groupId>com.google.inject</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
